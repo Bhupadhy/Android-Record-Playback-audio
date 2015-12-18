@@ -20,14 +20,19 @@ import java.util.Calendar;
 import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String LOG_TAG = "MainActivity";
     private static final int permissionRequestCode = 0;
     private String filename;
+
     public MediaRecorder recorder;
     private RecordButton record;
+
     private PlayButton play;
     public MediaPlayer player;
+
     private boolean permissionsGranted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,16 +123,20 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkPermissions(){
         if(permissionsGranted) return true;
-        // Check for 3 permissions then request missing
+
         ArrayList<String> permissions = new ArrayList<>();
+        // Write to Storage Permission
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             permissions.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+
+        // Read from Storage Permission
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             permissions.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
         }
+        // Record Audio Permission
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED){
             permissions.add(android.Manifest.permission.RECORD_AUDIO);
@@ -136,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     permissions.toArray(new String[permissions.size()]), permissionRequestCode);
         } else{
+            permissionsGranted = true;
             return true;
         }
         return false;
